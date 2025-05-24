@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Piano Sederhana</title>
+    <style>
+      /* ====================== RESET DASAR ====================== */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+
+      /* =================== BODY & LAYOUT UTAMA =================== */
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #ece9e6, #ffffff);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #333;
+      }
+      header {
+        margin-top: 1rem;
+      }
+      header h1 {
+        font-size: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 2rem;
+      }
+
+      /* ======================= PIANO KEYS ======================= */
+      .piano {
+        display: flex;
+        gap: 1rem;
+      }
+      .key {
+        width: 60px;
+        height: 200px;
+        background: linear-gradient(180deg, #fff, #eee);
+        border: 2px solid #333;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        font-weight: bold;
+        user-select: none;
+        transition: background 0.1s, transform 0.1s;
+        position: relative;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      /* Efek saat ditekan */
+      .key:active {
+        background: linear-gradient(180deg, #eee, #ddd);
+        transform: translateY(4px);
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+      }
+      .key span {
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      /* ===================== FOOTER STICKY ===================== */
+      footer {
+        width: 100%;
+        background: #333;
+        color: white;
+        text-align: center;
+        padding: 1rem 0;
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        font-size: 0.9rem;
+      }
+
+      /* ==================== MEDIA QUERIES ==================== */
+      @media (max-width: 600px) {
+        /* Tombol piano diper kecilkan */
+        .key {
+          width: 40px;
+          height: 140px;
+        }
+        .key span {
+          font-size: 0.8rem;
+        }
+        header h1 {
+          font-size: 1.5rem;
+        }
+      }
+      @media (max-width: 400px) {
+        .key {
+          width: 30px;
+          height: 100px;
+        }
+        .piano {
+          gap: 0.5rem;
+        }
+        header h1 {
+          font-size: 1.2rem;
+        }
+        footer {
+          font-size: 0.8rem;
+          padding: 0.8rem 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header: Judul Aplikasi -->
+    <header>
+      <h1>Piano Sederhana</h1>
+    </header>
+
+    <!-- Main: Tombol-tombol Piano -->
+    <main>
+      <div class="piano">
+        <!-- data-note menandai file audio yang akan diputar -->
+        <div class="key" data-note="a"><span>A</span></div>
+        <div class="key" data-note="c"><span>C</span></div>
+        <div class="key" data-note="d"><span>D</span></div>
+        <div class="key" data-note="e"><span>E</span></div>
+        <div class="key" data-note="f"><span>F</span></div>
+      </div>
+    </main>
+
+    <!-- Footer sticky di bawah -->
+    <footer>© 2025 Piano Sederhana — Created by Radif Hibatillah</footer>
+
+    <script>
+      /* ==================== Setup Audio NOTE ==================== */
+      // Objek notes menampung lima objek Audio
+      const notes = {
+        a: new Audio("/assets/a.wav"),
+        c: new Audio("/assets/c.wav"),
+        d: new Audio("/assets/d.wav"),
+        e: new Audio("/assets/e.wav"),
+        f: new Audio("/assets/f.wav"),
+      };
+
+      /* ==================== Ambil tombol piano ==================== */
+      const keys = document.querySelectorAll(".key");
+
+      /* ==================== Pasang event click ==================== */
+      keys.forEach((key) => {
+        key.addEventListener("click", () => {
+          // baca nada dari atribut data-note
+          const note = key.getAttribute("data-note");
+          if (!notes[note]) return; // jika nada tidak ada, hentikan
+          notes[note].currentTime = 0; // reset posisi audio
+          notes[note].play(); // mainkan suara
+        });
+      });
+
+      /* === (Optional) Event keyboard === 
+    // Contoh: keyboard A, S, D, F, G
+    document.addEventListener('keydown', e => {
+      const map = { 'a':'a', 's':'c', 'd':'d', 'f':'e', 'g':'f' };
+      const note = map[e.key.toLowerCase()];
+      if (note && notes[note]) {
+        notes[note].currentTime = 0;
+        notes[note].play();
+        const keyEl = document.querySelector(`.key[data-note="${note}"]`);
+        keyEl.classList.add('active');
+        setTimeout(() => keyEl.classList.remove('active'), 100);
+      }
+    });
+    */
+    </script>
+  </body>
+</html>
